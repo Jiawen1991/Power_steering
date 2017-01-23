@@ -1,11 +1,14 @@
 /*
  * AXPY  Y[N] = Y[N] + a*X[N]
+ * gcc axpy.c cpu_power.c cpu_freq.c -o axpy -lm -fopenmp
  */
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
 #include <string.h>
 #include <sys/timeb.h>
+#define _GNU_SOURCE
+#include <utmpx.h>
 
 #include <omp.h>
 
@@ -73,7 +76,7 @@ int main(int argc, char *argv[]) {
     int num_runs = 1;
 
     float power_freq = 1.2;
-    power_capping(200,200);
+    //power_capping(200,200);
     set_cpu_freq(0,71,&power_freq);
     energy_measure_before();   
   
@@ -104,17 +107,15 @@ void axpy_omp_parallel_for(int N, REAL *Y, REAL *X, REAL a) {
     int i;
     #pragma omp parallel shared(N, X, Y, a) private(i)
     #pragma omp for
-    for (i = 0; i < N; ++i)
+    for (i = 0; i < N; ++i){
+	//printf("CPU number:%d\n",sched_getcpu());
         Y[i] += a * X[i];
+	}
 }
 
 void axpy_omp_parallel_power(int N, REAL *Y, REAL *X, REAL a)
 {
-#pragma omp parallel shared(N, X, Y, a) private(i)
-#pragma omp for
-
-
-
-
+//#pragma omp parallel shared(N, X, Y, a) private(i)
+//#pragma omp for
 }
 

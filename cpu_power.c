@@ -180,6 +180,7 @@ static int detect_cpu(void) {
 
 static int total_cores=0,total_packages=0;
 static int package_map[MAX_PACKAGES];
+int packages_detected = 0;
 
 static int detect_packages(void) {
 
@@ -213,6 +214,7 @@ static int detect_packages(void) {
 
         printf("\tDetected %d cores in %d packages\n\n",
                 total_cores,total_packages);
+		
 
         return 0;
 }
@@ -228,11 +230,12 @@ static int detect_packages(void) {
         double dram_before[MAX_PACKAGES],dram_after[MAX_PACKAGES];
         double thermal_spec_power,minimum_power,maximum_power,time_window;
         int j;
-	int cpu_model;
+	int cpu_model = 0;
 
 void power_capping(int min_power, int max_power) {
 	cpu_model=detect_cpu();
         detect_packages();
+	packages_detected = 1;
 
 printf("\tPower Capping:\n");
 
@@ -306,7 +309,27 @@ printf("\tPower Capping:\n");
 
 void energy_measure_before()
 {
+	cpu_model=detect_cpu();
+	if (packages_detected == 0)
+	detect_packages();
         for(j=0;j<total_packages;j++) {
+
+	        fd=open_msr(package_map[j]);
+
+                /* Calculate the units used */
+                result=read_msr(fd,MSR_RAPL_POWER_UNIT);
+
+                power_units=pow(0.5,(double)(result&0xf));
+                cpu_energy_units[j]=pow(0.5,(double)((result>>8)&0x1f));
+                time_units=pow(0.5,(double)((result>>16)&0xf));
+
+                /* On Haswell EP the DRAM units differ from the CPU ones */
+                if (cpu_model==CPU_HASWELL_EP) {
+                        dram_energy_units[j]=pow(0.5,(double)16);
+                }
+                else {
+                        dram_energy_units[j]=cpu_energy_units[j];
+                }
 
                 fd=open_msr(package_map[j]);
 

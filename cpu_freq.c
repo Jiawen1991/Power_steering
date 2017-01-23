@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-void set_cpu_freq(int from, int to, float *freq)
+void set_cpu_freq_range(int from, int to, float *freq)
 {
 char cmd[100]  = "";
 char cmd1[100] = "sudo cpupower -c ";
@@ -31,6 +31,10 @@ printf("\t\tCores:%d to %d in %.2fGHz\n",from,to,*freq);
 system(cmd);
 }
 
+void set_cpu_freq(int id, float *freq)
+{
+	set_cpu_freq_range(id,id, freq);	
+}
 /*
 int main(int argc, char *argv[])
 {
