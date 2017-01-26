@@ -95,54 +95,30 @@ int main(int argc, char *argv[]) {
 
    // double iterations = log(num_threads)/log(2);
     int id;
+    num_threads=4;
 #pragma omp parallel num_threads(num_threads) shared(low_power_freq,i) private(id)
 {
-    id = sched_getcpu();
-    //printf("core id:%d\n",id);
-
-    //for(i=0;i<iterations-1;i++)
-    //{
-	if(id<num_threads/pow(2,0))
-	{
+	    id = sched_getcpu();
+    	printf("core id:%d\n",id);
 	    matmul_omp_for(N, A, B, C_omp);
-	}
-	else 
-	{
-    	 //   set_cpu_freq(id,&low_power_freq);
-	}
-
-#pragma omp barrier	
-
-    //}
-	if(id<num_threads/pow(2,1))
-        {   
-            matmul_omp_for(N, A, B, C_omp);
-        }
-        else
-        {   
-         //   set_cpu_freq(id,&low_power_freq);
-        }
-#pragma omp barrier
-	if(id<num_threads/pow(2,2))
-        {   
-            matmul_omp_for(N, A, B, C_omp);
-        }
-        else
-        {   
-         // set_cpu_freq(id,&low_power_freq);
-        }
-#pragma omp barrier
-	if(id<num_threads/pow(2,3))
-        {   
-            matmul_omp_for(N, A, B, C_omp);
-        }
-        else
-        {   
-            //set_cpu_freq(id,&low_power_freq);
-        }
-#pragma omp barrier
-
 }
+/*
+    num_threads=18;
+#pragma omp parallel num_threads(num_threads) shared(low_power_freq,i) private(id)
+{
+	    matmul_omp_for(N, A, B, C_omp);
+}
+    num_threads=36;
+#pragma omp parallel num_threads(num_threads) shared(low_power_freq,i) private(id)
+{
+	    matmul_omp_for(N, A, B, C_omp);
+}
+    num_threads=72;
+#pragma omp parallel num_threads(num_threads) shared(low_power_freq,i) private(id)
+{
+	    matmul_omp_for(N, A, B, C_omp);
+}
+*/
 
     elapsed_omp = (read_timer() - elapsed_omp)/num_runs;
 
