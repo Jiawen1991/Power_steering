@@ -49,7 +49,7 @@ static int open_msr(int core) {
 }
 
 
-void get_min_max_freq_info(float* min, float* max)
+void get_min_max_freq_info(float *min, float *max)
 {
 	unsigned long long msr;
 	unsigned int ratio;
