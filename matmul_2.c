@@ -11,8 +11,9 @@
 #include <string.h>
 #include "omp.h"
 
-#define _GNU_SOURCE
+//#define _GNU_SOURCE
 #include <utmpx.h>
+#include <sched.h>
 
 /* read timer in second */
 double read_timer() {

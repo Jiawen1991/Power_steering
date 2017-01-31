@@ -98,7 +98,8 @@ int main(int argc, char *argv[]) {
 #pragma omp parallel num_threads(num_threads) shared(low_power_freq,i) private(id)
 {
     id = sched_getcpu();
-    //printf("core id:%d\n",id);
+    printf("thread id:%d\n",omp_get_thread_num());
+    printf("core id:%d\n",id);
 
     //for(i=0;i<iterations-1;i++)
     //{
