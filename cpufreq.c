@@ -16,6 +16,7 @@
 
 #include "cpufreq.h"
 #include "cpupower_intern.h"
+#include "ompt_power.h"
 
 /* CPUFREQ sysfs access **************************************************/
 
