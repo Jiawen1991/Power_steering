@@ -739,6 +739,7 @@ unsigned long cpufreq_get_transitions(unsigned int cpu)
 void main()
 {
 	//cpufreq_set_frequency(0,1300000);
+	/*
 	struct cpufreq_policy *policy = cpufreq_get_policy(0);
 	printf("Min:%lu\nMax:%lu\nGovernor:%s\n",policy->min,policy->max,policy->governor);
 	int i;
@@ -746,5 +747,10 @@ void main()
 	policy->governor = governor;
 	for(i = 0;i<72;i++)
 	cpufreq_set_policy(i,policy);
+	*/
+	unsigned long cur_freq,min,max;
+	cpufreq_get_hardware_limits(0,&min,&max);
+	cur_freq = cpufreq_get_freq_hardware(0);
+	printf("CPU current frequency:%lu\n min frequency:%lu\n max frequency:%lu\n",cur_freq,min,max);
 }
 
